@@ -49,4 +49,11 @@ The model is implemented **from scratch using NumPy**, without using deep learni
   - NumPy  
   - Standard Python Libraries only
 
+## Effect of Feature Scaling on Model Performance
+The model was trained twice—once with raw data and once with Min-Max Scaled data—to observe the impact on gradient stability and accuracy.
+
+| Feature Set        | Convergence Behavior                                                                 | Test Accuracy |
+|--------------------|--------------------------------------------------------------------------------------|---------------|
+| Raw Data           | Highly unstable gradients due to varying feature scales, prone to overflow           | ~76.37%      |
+| Min-Max Scaled     | Stable and smooth loss curve; gradients are well-balanced across features            | ~83.91%       |
 
