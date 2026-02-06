@@ -1,59 +1,98 @@
-# Census Income Classification (From Scratch)
+# FCNN From Scratch Using NumPy  
+### Adult Income Classification (No Frameworks)
 
-## Problem Statement
-The goal of this project is to predict whether a person’s annual income exceeds **$50K/year** based on census data attributes such as age, education, occupation, working hours, etc.
+## Overview
+This project implements a **3-layer Fully Connected Neural Network (FCNN) from scratch** using only **NumPy and standard Python libraries**.  
+The task is binary classification on the **Adult Income (Census) dataset**, predicting whether a person earns more than **$50K per year**.
 
-This is a **binary classification problem**, commonly known as the **Census Income / Adult Income Dataset** problem.
+No deep learning frameworks (PyTorch / TensorFlow / Keras) are used.
 
 ---
 
 ## Dataset
-- **Source**: UCI Machine Learning Repository (Adult Dataset)
-- **Target Variable**:  
-  - `<=50K`  
-  - `>50K`
-- **Features include**:
-  - Age
-  - Education
-  - Occupation
-  - Workclass
-  - Marital Status
-  - Hours per week
-  - Capital gain/loss
-  - Gender, Race, etc.
+The **Adult Income dataset** contains demographic and employment-related census data.
 
-Categorical features are encoded before training.
+### Features
+- **Numerical:** age, fnlwgt, education-num, capital-gain, capital-loss, hours-per-week  
+- **Categorical:** workclass, education, marital-status, occupation, relationship, race, sex, native-country  
+
+**Target:**  
+- `1` → income > $50K  
+- `0` → income ≤ $50K  
+
+---
+
+## Data Preprocessing
+- Missing values (`?`) replaced with `NaN`
+- Categorical features encoded using **one-hot encoding**
+- First category dropped to avoid dummy-variable trap
+- Provided files used:
+  - `adult.data` (training)
+  - `adult.test` (testing)
+- Test set reindexed to match training features
 
 ---
 
 ## Model Architecture
-The model is implemented **from scratch using NumPy**, without using deep learning frameworks like TensorFlow or PyTorch.
+A **3-layer FCNN**:
+- Input layer: number of input features  
+- Hidden Layer 1: 64 neurons, **ReLU**
+- Hidden Layer 2: 32 neurons, **ReLU**
+- Output Layer: 1 neuron, **Sigmoid**
 
-**Fully Connected Neural Network (FCNN):**
-- Input Layer
-- Hidden Layer 1 (ReLU)
-- Hidden Layer 2 (ReLU)
-- Output Layer (Sigmoid)
+### Initialization
+- **He Initialization** for weights  
+- Biases initialized to zero  
 
 ---
 
-## Implementation Details
-- **Weight Initialization**: He Initialization  
-- **Bias Initialization**: Zeros  
-- **Activation Functions**:
-  - ReLU (Hidden Layers)
-  - Sigmoid (Output Layer)
-- **Loss Function**: Binary Cross-Entropy Loss  
-- **Optimizer**: Mini Batch Gradient Descent 
-- **Frameworks Used**:  
-  - NumPy  
-  - Standard Python Libraries only
+## Training Details
+- Loss Function: **Binary Cross-Entropy**
+- Optimizer: **Stochastic Gradient Descent (SGD)**
+- Learning Rate: `0.01`
+- Epochs: `100,000`
+- Loss printed **every 100 iterations**
+- One sample used per update (true SGD)
 
-## Effect of Feature Scaling on Model Performance
-The model was trained twice—once with raw data and once with Min-Max Scaled data—to observe the impact on gradient stability and accuracy.
 
-| Feature Set        | Convergence Behavior                                                                 | Test Accuracy |
-|--------------------|--------------------------------------------------------------------------------------|---------------|
-| Raw Data           | Highly unstable gradients due to varying feature scales, prone to overflow           | ~76.37%      |
-| Min-Max Scaled     | Stable and smooth loss curve; gradients are well-balanced across features            | ~83.91%       |
 
+## Feature Scaling Experiment
+The model is trained twice:
+1. Using **raw (unscaled) data**
+2. Using **Min-Max scaled data**
+
+Min-Max Scaling:
+
+---
+
+## Results
+
+### Accuracy Comparison
+
+| Dataset Type | Test Accuracy |
+|-------------|---------------|
+| Raw Data (Unscaled) | **76.37%** |
+| Min-Max Scaled Data | **83.85%** |
+
+The scaled model converges faster and generalizes better.
+
+---
+
+## Effect of Scaling on Gradients
+- Raw data has features with very different ranges (e.g., Age vs Capital Gain)
+- Large-scale features dominate gradients
+- Leads to unstable and slow SGD updates
+
+**After scaling:**
+- Gradients are well-conditioned
+- Faster convergence
+- Higher final accuracy
+
+---
+
+## Conclusion
+This project successfully demonstrates a **from-scratch FCNN implementation using NumPy**.  
+Feature scaling plays a critical role in stabilizing gradients and improving performance.  
+The final model exceeds the required **75% test accuracy**, fulfilling all assignment requirements.
+
+--
